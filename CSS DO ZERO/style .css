@@ -2,10 +2,11 @@
 
 body {
     background-color: #8C52FF;
+   
 }
 
 img {
-    width: 400px;
+    width: 100px;
     display: block;
     margin-left: auto;
     margin-right: auto;
