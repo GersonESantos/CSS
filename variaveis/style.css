@@ -1,0 +1,48 @@
+/* Definindo variáveis no :root para escopo global */
+:root {
+    /* Variáveis de cores */
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    
+    /* Variáveis de tamanho */
+    --spacing: 16px;
+    --font-size-base: 1rem;
+    
+    /* Variáveis de sombra */
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Usando as variáveis em classes */
+.container {
+    background-color: var(--background-color);
+    padding: var(--spacing);
+    box-shadow: var(--box-shadow);
+}
+
+.button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: calc(var(--spacing) / 2);
+    font-size: var(--font-size-base);
+    border: none;
+}
+
+/* Mudando valores das variáveis em um media query */
+@media (max-width: 768px) {
+    :root {
+        --spacing: 12px;
+        --font-size-base: 0.9rem;
+    }
+}
+
+/* Exemplo com fallback */
+.header {
+    background-color: var(--primary-color, #0000ff); /* #0000ff como fallback */
+}
+
+/* Exemplo de cálculo com variáveis */
+.box {
+    width: calc(var(--spacing) * 2);
+    margin: var(--spacing) auto;
+}

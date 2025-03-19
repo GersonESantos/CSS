@@ -1,0 +1,48 @@
+/* Definindo variáveis globais */
+:root {
+    --spacing: 16px;
+    --primary-color: #007bff;
+}
+
+/* 1. Centralizar texto horizontalmente */
+.text-center {
+    text-align: center;
+    padding: var(--spacing);
+}
+
+/* 2. Centralizar elemento block horizontalmente */
+.block-center {
+    margin: 0 auto;
+    width: 50%; /* Largura fixa necessária */
+    background-color: var(--primary-color);
+    color: white;
+    padding: var(--spacing);
+}
+
+/* 3. Centralizar com Flexbox (horizontal e vertical) */
+.flex-center {
+    display: flex;
+    justify-content: center; /* Horizontal */
+    align-items: center;     /* Vertical */
+    height: 200px;           /* Altura para visualizar o efeito */
+    background-color: #f0f0f0;
+}
+
+/* 4. Centralizar com Grid */
+.grid-center {
+    display: grid;
+    place-items: center;     /* Centraliza horizontal e vertical */
+    height: 200px;
+    background-color: #e0e0e0;
+}
+
+/* 5. Centralizar absolutamente (posição fixa) */
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-color);
+    color: white;
+    padding: var(--spacing);
+}
