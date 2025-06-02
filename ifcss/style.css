@@ -1,0 +1,60 @@
+.card {
+  /* Default styles (equivalent to 'else' condition) */
+  border: 1px solid gray;
+  background-color: #f7f7f7;
+  grid-column: 3; /* Default column for items without specific status or other statuses */
+
+  /* Common card styles */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 18px 0px;
+}
+
+/* Styles for card with data-status="pending" */
+.card[data-status="pending"] {
+  border-color: royalblue;
+  background-color: #eff7fa;
+  grid-column: 1;
+}
+
+/* Styles for card with data-status="complete" */
+.card[data-status="complete"] {
+  border-color: seagreen;
+  background-color: #f6fff6;
+  grid-column: 2;
+}
+
+/* The --status custom property might still be useful if you read it with JavaScript
+   or for other CSS purposes, but it's not used by the conditional styling above.
+   If you need it, you can define it like this on .card:
+.card {
+  --status: attr(data-status);
+} */
+
+.user {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+img {
+  width: 1.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.container {
+  display: grid;
+  max-width: 900px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: dense;
+  gap: 1rem;
+}
+
+body {
+  font-family: 'Roboto', system-ui;
+  display: grid;
+  justify-content: center;
+  padding: 1rem;
+}
