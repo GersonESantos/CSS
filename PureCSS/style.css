@@ -1,0 +1,172 @@
+@use 'sass:math';
+
+// angle (w.r.t. horizontal) 
+// at which the circular roundings connect
+$a-map: 18.5deg;
+// diameter of big circle cutout
+$d-map-0: 72cqw;
+// radius of big circle cutout
+$r-map-0: .5*$d-map-0;
+// distance from bottom at which roundings connect
+$h-map: $r-map-0*math.sin($a-map);
+// horizontal offset of point where circle connect
+// relative to the middle
+$x-map: $r-map-0*math.cos($a-map);
+// distance from lateral at which roundings connect
+$w-map: 50cqw - $x-map;
+// radius of small circle rounding
+$r-map-1: $w-map/math.cos($a-map);
+// vertical offset of small rounding circle 
+// from point where it connects with the big one
+$y-map: -1*$w-map*math.tan($a-map);
+
+$gap: 2cqw;
+
+$r-prg-0: $r-map-0 - $gap;
+$d-prg-0: 2*$r-prg-0;
+$d-prg-1: 3*$gap;
+$r-prg-1: .5*$d-prg-1;
+$a-prg-0: 15deg;
+$n-prg: 5;
+$a-prg-1: (360deg - 2*$a-prg-0)/$n-prg;
+$a-prg-2: $a-prg-1 - .8deg;
+$e-prg: .2deg;
+$r-prg-2: $r-prg-0 - $r-prg-1;
+$x-prg-0: $r-prg-2*math.sin($a-prg-0);
+$y-prg-0: $r-prg-2*math.cos($a-prg-0);
+$a-prg-3: 65deg;
+$a-prg-4: $a-prg-0 + $a-prg-3;
+$x-prg-1: $r-prg-2*math.sin($a-prg-4);
+$y-prg-1: $r-prg-2*math.cos($a-prg-4);
+$b-prg: 4px;
+
+* { margin: 0 }
+
+html, body, section, div { display: grid }
+
+html { height: 100% }
+
+body, section { container-type: size }
+
+body { background: #212121 }
+
+section {
+	grid-template-rows: 1fr 1fr;
+	place-self: center;
+	width: 100cqmin;
+	aspect-ratio: 1;
+	background: conic-gradient(#0000, #020202, #0000) #212121
+}
+
+.map {
+	grid-area: 1/ 1;
+	background: url(https://images.unsplash.com/photo-1730314737994-e50751608055?w=1600) 50%/ cover teal;
+	mask: 
+		radial-gradient($r-map-0 at 50% 100%, 
+				#0000 calc(100% - .5px), 
+				red calc(100% + .5px)) subtract, 
+		radial-gradient($r-map-1 at 0 $y-map, 
+				#0000 calc(100% - .5px), 
+				red calc(100% + .5px)) 
+			0 100%/ #{$w-map $h-map} no-repeat, 
+		radial-gradient($r-map-1 at 100% $y-map, 
+				#0000 calc(100% - .5px), 
+				red calc(100% + .5px)) 
+			100% 100%/ #{$w-map $h-map} no-repeat;
+	transition: filter .35s ease-out;
+		
+	/* supports test ALWAYS finds shape() supported 
+	 * IF flag enabled in Firefox
+	 * even with the flag enabled, curve doesn't work... 
+	 * but since the support test says it works...
+	 * we can't use curve, so we use arc instead 
+	 * arc works in Firefox with flag enabled */
+	@supports (clip-path: shape(from 0 0, arc by 9% 0 of 9%)) {
+		mask: none;
+		clip-path: 
+			shape(from 0 0, 
+						vline to 100%, 
+						arc by $w-map -1*$h-map of $r-map-1, 
+						arc by 2*$x-map 0 of $r-map-0 cw, 
+						arc by $w-map $h-map of $r-map-1,
+						vline to 0)
+	}
+	
+	&:hover { filter: invert(1) }
+}
+
+.prg {
+	grid-area: 1/ 1/ span 2;
+	place-self: center;
+	margin-top: .5em;
+	width: $d-prg-0;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	
+	&::before, &::after {
+		grid-area: 1/ 1;
+		border-radius: 50%;
+		content: ''
+	}
+	
+	&::before {
+		box-shadow: inset 0 0 0 $d-prg-1 grey;
+		clip-path: inset(calc(50% - #{$y-prg-0 + $r-prg-1}) 0 0);
+		mask: 
+			radial-gradient($r-prg-1 
+					at calc(50% - #{$x-prg-0}) calc(50% - #{$y-prg-0}), 
+					red calc(100% - .5px), #0000 calc(100% + .5px)), 
+			radial-gradient($r-prg-1 
+					at calc(50% + #{$x-prg-0}) calc(50% - #{$y-prg-0}), 
+					red calc(100% - .5px), #0000 calc(100% + .5px)), 
+			repeating-conic-gradient(from $a-prg-0, 
+					#0000 0, 
+					red 2*$e-prg $a-prg-2 - $e-prg, 
+					#0000 $a-prg-2 + $e-prg $a-prg-1) 
+				subtract, 
+			conic-gradient(from -1*$a-prg-0, 
+					red 2*$a-prg-0, #0000 0%)
+	}
+	
+	&::after {
+		padding: $d-prg-1;
+		background: 
+			repeating-conic-gradient(#0000 0%, 
+					orange 2*$e-prg 1deg, 
+					#0000 1deg + 2*$e-prg 2deg) gold;
+		mask:
+			radial-gradient($r-prg-1 
+					at calc(50% + #{$x-prg-0}) calc(50% - #{$y-prg-0}), 
+					red calc(100% - .5px), #0000 calc(100% + .5px)), 
+			radial-gradient($r-prg-1 
+					at calc(50% + #{$x-prg-1}) calc(50% - #{$y-prg-1}), 
+					red calc(100% - .5px), #0000 calc(100% + .5px)), 
+			conic-gradient(from $a-prg-0, 
+					red $a-prg-3, #0000 0%) subtract, 
+			conic-gradient(red 0 0) content-box
+			
+	}
+}
+
+.val {
+	grid-area: 1/ 1;
+	grid-gap: .5em;
+	place-content: center;
+	z-index: 1;
+	margin: $d-prg-1 + $gap;
+	padding: 3% 13.5% 0;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 $b-prg grey;
+	color: #ededed;
+	font: 4cqw raleway, sans-serif;
+	text-align: center;
+	mask: 
+		radial-gradient(closest-side, 
+				red calc(100% + #{-1*$b-prg} - 1px), 
+				#0000 calc(100% + #{-1*$b-prg})), 
+		conic-gradient(from -120deg, #0000 45deg, red)
+}
+
+strong {
+	font: 800 2.875em/ 1 national park, sans-serif;
+}
